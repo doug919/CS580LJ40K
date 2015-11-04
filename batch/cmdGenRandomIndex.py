@@ -88,10 +88,11 @@ if __name__ == '__main__':
     random.shuffle(random_list)
 
     idx_dict = {}
-    idx_dict['train'] = random_list[0:n_train]
-    idx_dict['dev'] = random_list[n_train:n_train+n_dev]
-    idx_dict['test'] = random_list[n_train+n_dev:n_train+n_dev+n_test]
+    idx_dict['train'] = sorted(random_list[0:n_train])
+    idx_dict['dev'] = sorted(random_list[n_train:n_train+n_dev])
+    idx_dict['test'] = sorted(random_list[n_train+n_dev:n_train+n_dev+n_test])
 
 
     logger.info("dumping file to %s" % (args.output_filename))
     utils.save_pkl_file(idx_dict, args.output_filename)
+    
