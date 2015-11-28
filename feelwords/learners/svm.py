@@ -1,7 +1,7 @@
 
 from sklearn.svm import LinearSVC
 
-from .LearnerBase import LearnerBase
+from .base import LearnerBase
 
 class LinearSvm(LearnerBase):
 

@@ -3,6 +3,8 @@ import cPickle as pickle
 import logging
 import numpy as np
 import json
+import re
+import os
 
 def sigmoid(x):
     neg_x = map(lambda v: v*(-1), x)
@@ -93,14 +95,23 @@ def get_file_name_by_emtion(train_dir, emotion, **kwargs):
             break
     return target
 
-def get_paths_by_emotion(features, emotion_name):
-    paths = []
-    for feature in features:         
-        fname = get_file_name_by_emtion(feature['train_dir'], emotion_name, exp='.npz')
-        if fname is not None:
-            paths.append(os.path.join(feature['train_dir'], fname))
-    return paths
+def atoi(text):
+    return int(text) if text.isdigit() else text
 
+def natural_keys(text):
+    '''
+    alist.sort(key=natural_keys) sorts in human order
+    http://nedbatchelder.com/blog/200712/human_sorting.html
+    (See Toothy's implementation in the comments)
+    '''
+    return [ atoi(c) for c in re.split('(\d+)', text) ]
+
+def get_paths_by_re(search_dir, reg):
+    files = [f for f in os.listdir(search_dir) if re.match(reg, f)]
+    files.sort(key=natural_keys)
+    paths = [os.path.join(search_dir, f) for f in files]
+
+    return paths
 
 def dump_dict_to_csv(file_name, data):
     import csv

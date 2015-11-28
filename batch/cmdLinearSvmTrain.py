@@ -62,9 +62,9 @@ if __name__ == '__main__':
     logger = logging.getLogger(__name__)
 
     # some pre-checking
-    if temp_output_dir is not None and os.path.exists(args.temp_output_dir):
+    if args.temp_output_dir is not None and os.path.exists(args.temp_output_dir):
         raise Exception("folder %s is already existed." % (args.temp_output_dir))
-    elif temp_output_dir is not None and not os.path.exists(args.temp_output_dir):
+    elif args.temp_output_dir is not None and not os.path.exists(args.temp_output_dir):
         logger.info('create output folder %s' % (args.temp_output_dir))
         os.makedirs(args.temp_output_dir)
 
@@ -74,6 +74,9 @@ if __name__ == '__main__':
     if not utils.test_writable(args.output_file_name): 
         raise Exception("file %s is not writable." % (args.output_file_name))
 
+    train_file_paths = utils.get_paths_by_re(features[0]['train_dir'], features[0]['train_filename'])
+    test_file_paths = utils.get_paths_by_re(features[0]['test_dir'], features[0]['test_filename'])
+    import pdb; pdb.set_trace()
 
     # main loop
     collect_best_param = {}   # TODO: remove
