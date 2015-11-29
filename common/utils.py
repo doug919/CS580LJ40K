@@ -106,11 +106,20 @@ def natural_keys(text):
     '''
     return [ atoi(c) for c in re.split('(\d+)', text) ]
 
+def get_paths_by_re_and_emotion_id(features, eid):
+    paths = []
+    for fe in features:
+        fdir = fe['train_dir']
+        fre = fe['train_filename']
+        files = [f for f in os.listdir(fdir) if re.match(fre, f)]
+        files.sort(key=natural_keys)
+        paths.append(os.path.join(fdir, files[eid]))
+    return paths
+
 def get_paths_by_re(search_dir, reg):
     files = [f for f in os.listdir(search_dir) if re.match(reg, f)]
     files.sort(key=natural_keys)
     paths = [os.path.join(search_dir, f) for f in files]
-
     return paths
 
 def dump_dict_to_csv(file_name, data):
@@ -124,4 +133,5 @@ def dump_list_to_csv(file_name, data):
     w = csv.writer(open(file_name, 'w'))
     for row in data:
         w.writerow(row)
+
 

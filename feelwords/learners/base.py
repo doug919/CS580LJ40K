@@ -60,6 +60,69 @@ class LearnerBase(object):
         except ValueError:
             self.logger.error("failed to load %s" % (file_name))
 
+    ##
+    # get precision
+    #
+    # @param y_predict
+    #               - predicted labels of testing data
+    # @param y_test
+    #               - labels of testing data
+    #
+    # @return None
+    #
+    @staticmethod
+    def precision(y_predict, y_test):
+        tp = [i for i in range(len(y_test)) if y_test[i]>0 and y_predict[i]>0]
+        fp = [i for i in range(len(y_test)) if y_test[i]<=0 and y_predict[i]>0]
+
+        #assert (len(tp)+len(fp) != 0)
+        if len(tp)+len(fp) != 0:
+            precision = float(len(tp)) / (len(tp)+len(fp))
+        else:
+            logging.debug("Both true positives and false positives are zero, so we cannot calculate the precision.")
+            precision = -1
+        return precision
+
+    ##
+    # get recall
+    #
+    # @param y_predict
+    #               - predicted labels of testing data
+    # @param y_test
+    #               - labels of testing data
+    #
+    # @return None
+    #
+    @staticmethod
+    def recall(y_predict, y_test):
+        tp = [i for i in range(len(y_test)) if y_test[i]>0 and y_predict[i]>0]
+        fn = [i for i in range(len(y_test)) if y_test[i]>0 and y_predict[i]<=0]
+        
+        #assert (len(tp)+len(fn) != 0)
+
+        if len(tp)+len(fn) != 0:
+            recall = float(len(tp)) / (len(tp)+len(fn))
+        else:
+            logging.debug("Both true positives and false negatives are zero, so we cannot calculate the precision.")
+            recall = -1
+
+        
+        return recall
+
+    ##
+    # get F-1 score
+    #
+    # @param precision
+    #               - calculated by precision()
+    # @param recall
+    #               - calculated by recall()
+    #
+    # @return None
+    #
+    @staticmethod
+    def f1_score(precision, recall):
+        return (2.0 * precision * recall) / (precision + recall)
+
     # abstract functions
     def train(self, **kwargs):
         pass

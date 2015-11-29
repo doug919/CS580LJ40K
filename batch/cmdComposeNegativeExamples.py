@@ -48,7 +48,7 @@ if __name__ == '__main__':
         os.makedirs(args.temp_output_dir)
 
     train_file_paths = utils.get_paths_by_re(features[0]['train_dir'], features[0]['train_filename'])
-    test_file_paths = utils.get_paths_by_re(features[0]['test_dir'], features[0]['test_filename'])
+    #test_file_paths = utils.get_paths_by_re(features[0]['test_dir'], features[0]['test_filename'])
 
     n_emotions = len(emotions)
     X_train_pos = [None] * n_emotions
@@ -85,10 +85,12 @@ if __name__ == '__main__':
     for emotion_id in range(n_emotions):
 
         X_train = np.concatenate((X_train_pos[emotion_id], X_train_neg[emotion_id]), axis=0)
-        y_train = np.concatenate((np.ones(n_pos), np.zeros(n_pos)), axis=1)
+        y_train = np.concatenate((np.ones(n_pos), np.array([-1]*n_pos)), axis=1)
+
 
         fname = "%s%d.npz" % (args.file_prefix, emotion_id)
         fpath = os.path.join(args.temp_output_dir, fname)
+        logger.info("write file %s" % fpath)
         np.savez_compressed(fpath, X=X_train, y=y_train)
     
 
